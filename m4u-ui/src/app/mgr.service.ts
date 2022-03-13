@@ -26,4 +26,11 @@ export class MgrService {
 
     return this.http.post(`${baseurl}/submit`, data);
   }
+
+  getLatestDonations() {
+    let baseurl = this.getBaseUrl();
+
+    return this.http.get(`${baseurl}/latestdonations`);
+  }
+
 }

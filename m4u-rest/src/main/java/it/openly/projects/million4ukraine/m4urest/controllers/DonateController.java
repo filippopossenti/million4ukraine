@@ -4,6 +4,7 @@ import it.openly.projects.million4ukraine.m4urest.services.DataService;
 import it.openly.projects.million4ukraine.m4urest.services.TileComposerService;
 import it.openly.projects.million4ukraine.m4urest.utils.XY;
 import it.openly.projects.million4ukraine.m4urest.views.M4UMessage;
+import it.openly.projects.million4ukraine.m4urest.views.NameAndMessage;
 import lombok.SneakyThrows;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -36,13 +38,18 @@ public class DonateController {
         BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageData));
 
         XY spot = tileComposerService.applyTile(image);
-        dataService.saveData(request, spot);
+        dataService.saveMessage(request, spot);
     }
 
     @GetMapping(value = "thumbnail", produces = MediaType.IMAGE_JPEG_VALUE)
     public @ResponseBody byte[] thumbnail(@RequestParam("ts") long ts) {
         BufferedImage image = tileComposerService.getComposedImageThumbnail();
         return tileComposerService.getImageData(image);
+    }
+
+    @GetMapping(value = "latestdonations")
+    public List<NameAndMessage> getLatestDonations() {
+        return dataService.getLatestMessages();
     }
 
 }
