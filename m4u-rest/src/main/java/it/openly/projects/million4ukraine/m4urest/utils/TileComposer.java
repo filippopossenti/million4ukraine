@@ -2,9 +2,7 @@ package it.openly.projects.million4ukraine.m4urest.utils;
 
 import lombok.*;
 
-import java.awt.RenderingHints;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +17,10 @@ public class TileComposer {
     @Setter
     private BufferedImage image;
     private Random random;
+
+    private final int UKR_FLAG_AZURE=0x0057b7;
+    private final int UKR_FLAG_GOLD=0xffd700;
+
 
     public TileComposer(BufferedImage mask, BufferedImage image) {
         this(mask, image, new Random());
@@ -71,14 +73,38 @@ public class TileComposer {
         mask.setRGB(location.getX(), location.getY(), 0xffffffff);
     }
 
-    public BufferedImage prepareTile(BufferedImage tileImage) {
-        int tileWidth = image.getWidth() / mask.getWidth();
-        int tileHeight = image.getHeight() / mask.getHeight();
+    public Color getBackgroundColorFor(XY coords) {
+        if(coords.getY() > mask.getHeight() / 2) {
+            return new Color(UKR_FLAG_GOLD);
+        }
+        return new Color(UKR_FLAG_AZURE);
+    }
 
-        BufferedImage tile = new BufferedImage(tileWidth, tileHeight, BufferedImage.TYPE_INT_RGB);
+    public BufferedImage prepareTile(BufferedImage tileImage, Color backgroundColor) {
+        double targetTileWidth = (double)image.getWidth() / (double)mask.getWidth();
+        double targetTileHeight = (double)image.getHeight() / (double)mask.getHeight();
+
+        double ratio = ((double)tileImage.getWidth()) / ((double)tileImage.getHeight());
+
+        double tileHeight = targetTileHeight / ratio;
+        double tileWidth = targetTileWidth;
+
+        if(tileHeight > targetTileHeight) {
+            tileHeight = targetTileHeight;
+            tileWidth = targetTileWidth * ratio;
+        }
+
+        int xpos = (int)((targetTileWidth - tileWidth) / 2.0f);
+        int ypos = (int)((targetTileHeight - tileHeight) / 2.0f);
+
+        BufferedImage tile = new BufferedImage((int)targetTileWidth, (int)targetTileHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = tile.createGraphics();
+        g.setBackground(backgroundColor);
+        g.setColor(backgroundColor);
+        g.drawRect(0, 0, (int)targetTileWidth, (int)targetTileHeight);
+        g.fillRect(0, 0, (int)targetTileWidth, (int)targetTileHeight);
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-        g.drawImage(tileImage, 0, 0, tileWidth, tileHeight, null);
+        g.drawImage(tileImage, xpos, ypos, (int)tileWidth, (int)tileHeight, null);
         g.dispose();
         return tile;
     }

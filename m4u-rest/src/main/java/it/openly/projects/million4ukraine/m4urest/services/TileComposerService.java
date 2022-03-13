@@ -48,8 +48,9 @@ public class TileComposerService {
 
     public XY applyTile(BufferedImage image) {
         TileComposer composer = prepareTileComposer();
-        BufferedImage tile = composer.prepareTile(image);
         XY spot = composer.getRandomEmptySpot();
+        Color backgroundColor = composer.getBackgroundColorFor(spot);
+        BufferedImage tile = composer.prepareTile(image, backgroundColor);
         composer.applyTile(spot, tile);
         saveComposedImageData(composer);
         return spot;

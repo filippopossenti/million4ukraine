@@ -13,9 +13,9 @@ public class DataCleaner {
     }
 
     public static void constrainSize(M4UMessage msg) {
-        msg.setName(msg.getName().substring(0, 255));
-        msg.setEmail(msg.getEmail().substring(0, 255));
-        msg.setMessage(msg.getMessage().substring(0, 500));
-        msg.setNationality(msg.getNationality().substring(0, 100));
+        msg.setName(msg.getName().substring(0, Math.min(msg.getName().length() , 255)));
+        msg.setEmail(msg.getEmail().substring(0, Math.min(msg.getEmail().length() , 255)));
+        msg.setMessage(msg.getMessage().substring(0, Math.min(msg.getMessage().length() , 500)));
+        msg.setNationality(msg.getNationality().substring(0, Math.min(msg.getNationality().length() , 100)));
     }
 }

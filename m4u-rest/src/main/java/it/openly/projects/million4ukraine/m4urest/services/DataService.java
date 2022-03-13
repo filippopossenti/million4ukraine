@@ -23,7 +23,6 @@ public class DataService {
     M4UMessages repository;
 
     public void saveMessage(M4UMessage request, XY spot) {
-        DataCleaner.xssClean(request);
         request.setId(UUID.randomUUID().toString());
         request.setTimestamp(new Date());
         request.setX(spot.getX());

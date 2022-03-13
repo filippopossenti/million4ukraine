@@ -2,6 +2,7 @@ package it.openly.projects.million4ukraine.m4urest.controllers;
 
 import it.openly.projects.million4ukraine.m4urest.services.DataService;
 import it.openly.projects.million4ukraine.m4urest.services.TileComposerService;
+import it.openly.projects.million4ukraine.m4urest.utils.DataCleaner;
 import it.openly.projects.million4ukraine.m4urest.utils.XY;
 import it.openly.projects.million4ukraine.m4urest.views.M4UMessage;
 import it.openly.projects.million4ukraine.m4urest.views.NameAndMessage;
@@ -30,6 +31,9 @@ public class DonateController {
     @PostMapping("submit")
     @SneakyThrows
     public void submit(@RequestBody M4UMessage request) {
+        DataCleaner.xssClean(request);
+        DataCleaner.constrainSize(request);
+
         String dataurl = request.getImageDataurl();
         String payload = dataurl.substring(dataurl.indexOf(",") + 1);
 
