@@ -1,5 +1,6 @@
 package it.openly.projects.million4ukraine.m4urest.services;
 
+import it.openly.projects.million4ukraine.m4urest.utils.Constants;
 import it.openly.projects.million4ukraine.m4urest.utils.TileComposer;
 import it.openly.projects.million4ukraine.m4urest.utils.XY;
 import lombok.SneakyThrows;
@@ -41,9 +42,21 @@ public class TileComposerService {
         }
         catch(Exception ex) {
             image = new BufferedImage(TILE_SIZE * HORIZONTAL_TILES, TILE_SIZE * VERTICAL_TILES, TYPE_INT_RGB);
+            buildUkrainianFlag(image);
         }
 
         return new TileComposer(mask, image);
+    }
+
+    private void buildUkrainianFlag(BufferedImage image) {
+        Graphics2D g = image.createGraphics();
+        g.setColor(new Color(Constants.UKR_FLAG_AZURE, false));
+        g.drawRect(0, 0, image.getWidth(), image.getHeight() / 2);
+        g.fillRect(0, 0, image.getWidth(), image.getHeight() / 2);
+        g.setColor(new Color(Constants.UKR_FLAG_GOLD, false));
+        g.drawRect(0, image.getHeight() / 2, image.getWidth(), image.getHeight() / 2);
+        g.fillRect(0, image.getHeight() / 2, image.getWidth(), image.getHeight() / 2);
+
     }
 
     @SneakyThrows

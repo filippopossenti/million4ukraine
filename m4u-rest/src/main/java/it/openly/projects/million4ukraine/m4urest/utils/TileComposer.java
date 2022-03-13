@@ -18,9 +18,6 @@ public class TileComposer {
     private BufferedImage image;
     private Random random;
 
-    private final int UKR_FLAG_AZURE=0x0057b7;
-    private final int UKR_FLAG_GOLD=0xffd700;
-
 
     public TileComposer(BufferedImage mask, BufferedImage image) {
         this(mask, image, new Random());
@@ -47,8 +44,8 @@ public class TileComposer {
         // and then specifically select one of those spots
 
         List<XY> availableCoords = new ArrayList<>();
-        for(int y = 0; y < mask.getHeight() - (height - 1); y += height) {
-            for(int x = 0; x < mask.getWidth() - (width - 1); x += width) {
+        for(int y = 0; y < mask.getHeight() - height; y += height) {
+            for(int x = 0; x < mask.getWidth() - width; x += width) {
                 if(isEmptyArea(mask, x, y, width, height)) {
                     availableCoords.add(new XY(x, y));
                 }
@@ -98,9 +95,9 @@ public class TileComposer {
 
     public Color getBackgroundColorFor(XY coords) {
         if(coords.getY() > mask.getHeight() / 2) {
-            return new Color(UKR_FLAG_GOLD);
+            return new Color(Constants.UKR_FLAG_GOLD);
         }
-        return new Color(UKR_FLAG_AZURE);
+        return new Color(Constants.UKR_FLAG_AZURE);
     }
 
     public BufferedImage prepareTile(BufferedImage tileImage, Color backgroundColor, int sizeX, int sizeY) {
