@@ -1,3 +1,9 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 h1 {
   text-align: center;
 }
@@ -11,13 +17,10 @@ h1 {
   margin: 1em;
 }
 
-.scaledpicture {
+img.scaledpicture {
   border: 1px solid gray;
   flex: 0.75;
-}
-
-.scaledpicture img {
-  width: 100%;
+  width: 75%;
   height: 100%;
   object-fit: cover;
 }
@@ -59,13 +62,42 @@ h1 {
 .donate-form {
   margin: 1em;
   margin-top: 4em;
+  display: flex;
+  flex-direction: column;
 }
 
-.donate-form div {
+.donate-form > div {
   margin: 0.5em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
+
+.donate-form > div > div.label {
+  min-width: 140px;
+  width: 140px;
+}
+
+.donate-form > div > div.value {
+  flex: 1;
+}
+
+.donate-form > div > div.value input {
+  width: 100%;
+}
+
+.donate-form > div > div.value textarea {
+  width: 100%;
+}
+
+.donate-form > div > div.value select {
+  width: 50%;
+}
+
 
 .right-aligned {
   display: flex;
   justify-content: flex-end;
 }
+
+
