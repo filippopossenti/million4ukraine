@@ -20,6 +20,10 @@ export class AppComponent implements OnInit {
 
   latestDonations: any;
 
+  targetDonation: number = 5;
+
+  baseDonation: number = 5;
+
   constructor(private mgrService: MgrService) {
     this.thumbnailurl = mgrService.getThumbnailUrl();
   }
@@ -64,6 +68,7 @@ export class AppComponent implements OnInit {
     let values = evt.target.value.split("x");
     this.size_x = parseInt(values[0]);
     this.size_y = parseInt(values[1]);
+    this.targetDonation = this.size_x * this.size_y * this.baseDonation;
   }
 
 
