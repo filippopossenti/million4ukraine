@@ -1,6 +1,7 @@
 package it.openly.projects.million4ukraine.m4urest.services;
 
 import it.openly.projects.million4ukraine.m4urest.repositories.M4UMessages;
+import it.openly.projects.million4ukraine.m4urest.utils.DataCleaner;
 import it.openly.projects.million4ukraine.m4urest.utils.XY;
 import it.openly.projects.million4ukraine.m4urest.views.M4UMessage;
 import it.openly.projects.million4ukraine.m4urest.views.NameAndMessage;
@@ -22,6 +23,7 @@ public class DataService {
     M4UMessages repository;
 
     public void saveMessage(M4UMessage request, XY spot) {
+        DataCleaner.xssClean(request);
         request.setId(UUID.randomUUID().toString());
         request.setTimestamp(new Date());
         request.setX(spot.getX());

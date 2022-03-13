@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
     this.email = evt.target.value;
   }
 
-  onNationalityKeyUp(evt: any) {
+  onNationalityChange(evt: any) {
     this.nationality = evt.target.value;
   }
 
