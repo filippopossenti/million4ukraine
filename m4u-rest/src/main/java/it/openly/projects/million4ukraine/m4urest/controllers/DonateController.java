@@ -41,7 +41,7 @@ public class DonateController {
 
         BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageData));
 
-        XY spot = tileComposerService.applyTile(image);
+        XY spot = tileComposerService.applyTile(image, request.getSizeX(), request.getSizeY());
         dataService.saveMessage(request, spot);
     }
 

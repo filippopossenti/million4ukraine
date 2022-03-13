@@ -79,8 +79,8 @@ export class AppComponent implements OnInit {
       nationality: this.nationality,
       message: this.message,
       imageDataurl: this.imageDataurl,
-      size_x: this.size_x,
-      size_y: this.size_y
+      sizeX: this.size_x,
+      sizeY: this.size_y
     }).subscribe(result => {
       this.thumbnailurl = this.mgrService.getThumbnailUrl();
       this.loadLatestMessages();
