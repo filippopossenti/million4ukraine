@@ -1,5 +1,6 @@
 package it.openly.projects.million4ukraine.m4urest.controllers;
 
+import it.openly.projects.million4ukraine.m4urest.services.AsyncTileComposerService;
 import it.openly.projects.million4ukraine.m4urest.services.DataService;
 import it.openly.projects.million4ukraine.m4urest.services.TileComposerService;
 import it.openly.projects.million4ukraine.m4urest.utils.DataCleaner;
@@ -14,17 +15,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 @CrossOrigin
 @RestController
 public class DonateController {
 
-    private final TileComposerService tileComposerService;
+    private final AsyncTileComposerService asyncTileComposerService;
     private final DataService dataService;
 
-    public DonateController(TileComposerService tileComposerService, DataService dataService) {
-        this.tileComposerService = tileComposerService;
+    public DonateController(AsyncTileComposerService asyncTileComposerService, DataService dataService) {
+        this.asyncTileComposerService = asyncTileComposerService;
         this.dataService = dataService;
     }
 
@@ -41,19 +43,29 @@ public class DonateController {
 
         BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageData));
 
-        XY spot = tileComposerService.applyTile(image, request.getSizeX(), request.getSizeY());
+        XY spot = asyncTileComposerService.applyTile(image, request.getSizeX(), request.getSizeY()).get();
         dataService.saveMessage(request, spot);
     }
 
     @GetMapping(value = "thumbnail", produces = MediaType.IMAGE_JPEG_VALUE)
+    @SneakyThrows
     public @ResponseBody byte[] thumbnail(@RequestParam("ts") long ts) {
-        BufferedImage image = tileComposerService.getComposedImageThumbnail();
-        return tileComposerService.getImageData(image);
+        BufferedImage image = asyncTileComposerService.getComposedImageThumbnail().get();
+        return getImageData(image);
     }
 
     @GetMapping(value = "latestdonations")
     public List<NameAndMessage> getLatestDonations() {
         return dataService.getLatestMessages();
     }
+
+    @SneakyThrows
+    private byte[] getImageData(BufferedImage image) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ImageIO.write(image, "jpg", bos);
+
+        return bos.toByteArray();
+    }
+
 
 }

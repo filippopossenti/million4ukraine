@@ -60,8 +60,36 @@ export class AppComponent implements OnInit {
   onFileUploaded(evt: Event) {
     if(evt && evt.target) {
       let tgt: any = evt.target;
-      this.imageDataurl = tgt.result;
+      let img = document.createElement('img');
+      img.onload = this.onImageLoaded.bind(this);
+      img.src = tgt.result;
     }
+  }
+
+  onImageLoaded(evt: Event) {
+    this.imageDataurl = this.resizeImage(evt.target, 720);
+  }
+
+  resizeImage(image: any, maxSize: number) {
+    let width = image.width;
+    let height = image.height;
+    if (width > height) {
+        if (width > maxSize) {
+            height *= maxSize / width;
+            width = maxSize;
+        }
+    } else {
+        if (height > maxSize) {
+            width *= maxSize / height;
+            height = maxSize;
+        }
+    }
+    let canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    let ctx = canvas.getContext('2d')
+    ctx!.drawImage(image, 0, 0, width, height);
+    return canvas.toDataURL('image/jpeg');
   }
 
   onSizeChange(evt: any) {
