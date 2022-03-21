@@ -31,7 +31,7 @@ public class DataService {
     }
 
     public List<NameAndMessage> getLatestMessages() {
-        Page<M4UMessage> results = repository.findAll(PageRequest.of(0, 20, Sort.Direction.DESC, "timestamp"));
+        Page<M4UMessage> results = repository.findAll(PageRequest.of(0, 5, Sort.Direction.DESC, "timestamp"));
         return results.get().map(msg -> new NameAndMessage(msg.getName(), msg.getMessage(), msg.getTimestamp())) .collect(Collectors.toList());
     }
 }

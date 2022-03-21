@@ -17,9 +17,9 @@ import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 @Service
 public class TileComposerService {
 
-    private static final int TILE_SIZE = 32;
-    private static final int HORIZONTAL_TILES = 682;
-    private static final int VERTICAL_TILES = 383;
+    private static final int TILE_SIZE = 96;
+    private static final int HORIZONTAL_TILES = 200;
+    private static final int VERTICAL_TILES = 112;
 
     private static final int THUMB_WIDTH = 1920;
 

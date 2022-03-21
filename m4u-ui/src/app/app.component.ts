@@ -24,6 +24,8 @@ export class AppComponent implements OnInit {
 
   baseDonation: number = 5;
 
+  waitMaskVisible: boolean = false;
+
   constructor(private mgrService: MgrService) {
     this.thumbnailurl = mgrService.getThumbnailUrl();
   }
@@ -101,6 +103,7 @@ export class AppComponent implements OnInit {
 
 
   upload() {
+    this.waitMaskVisible = true;
     this.mgrService.submit({
       name: this.name,
       email: this.email,
@@ -118,6 +121,7 @@ export class AppComponent implements OnInit {
   loadLatestMessages() {
     this.mgrService.getLatestDonations().subscribe(results => {
       this.latestDonations = results;
+      this.waitMaskVisible = false;
     });
   }
 }

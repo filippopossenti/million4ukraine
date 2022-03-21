@@ -1,7 +1,6 @@
 .main {
   display: flex;
   flex-direction: column;
-  height: 100vh;
 }
 
 h1 {
@@ -14,7 +13,9 @@ h1 {
 }
 
 .main-section {
-  margin: 1em;
+  padding: 1em;
+  flex: 1;
+  align-items: stretch;
 }
 
 img.scaledpicture {
@@ -28,7 +29,8 @@ img.scaledpicture {
 .message-list {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  overflow: scroll;
+  height: 250px;
 }
 
 .messages {
@@ -100,4 +102,36 @@ img.scaledpicture {
   justify-content: flex-end;
 }
 
+.wait-mask-background {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: 0.7;
+  background-color: #000000;
+}
 
+.wait-mask {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.wait-mask-message-container {
+  width: 300px;
+  height: 200px;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.wait-mask-message {
+  width: 75%;
+  text-align: center;
+}
