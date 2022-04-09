@@ -1,8 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
+html, body {
+  height: 100%;
+}
+
 body {
   margin: 0px;
   font-size: 1.2em;
+  overflow: hidden;
 }
 
 
@@ -15,5 +20,9 @@ button {
 }
 
 select {
+  font-size: 1.2em;
+}
+
+textarea {
   font-size: 1.2em;
 }

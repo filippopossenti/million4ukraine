@@ -6,10 +6,10 @@ import it.openly.projects.million4ukraine.m4urest.utils.XY;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import static java.awt.image.BufferedImage.TYPE_INT_RGB;
@@ -17,13 +17,19 @@ import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 @Service
 public class TileComposerService {
 
-    // FIXME: this whole thing won't work in production. Switch to an asyncservice with producer/consumer pattern
+    private static final int TILE_SIZE = 96;
+    private static final int HORIZONTAL_TILES = 200;
+    private static final int VERTICAL_TILES = 112;
 
-    private final int TILE_SIZE = 32;
-    private final int HORIZONTAL_TILES = 682;
-    private final int VERTICAL_TILES = 383;
+    private static final int THUMB_WIDTH = 1920;
 
-    private final int THUMB_WIDTH = 1920;
+    private TileComposer composer;
+
+
+    @PostConstruct
+    public void init() {
+        composer = prepareTileComposer();
+    }
 
     @SneakyThrows
     private TileComposer prepareTileComposer() {
@@ -65,39 +71,21 @@ public class TileComposerService {
         ImageIO.write(composer.getMask(), "jpg", new File("image_mask.jpg"));
     }
 
-    public XY applyTile(BufferedImage image, int sizeX, int sizeY) {
-        TileComposer composer = prepareTileComposer();
-        XY spot = composer.getRandomEmptySpot(sizeX, sizeY);
+    public XY selectRandomEmptySpot(int sizeX, int sizeY) {
+        return composer.getRandomEmptySpot(sizeX, sizeY);
+    }
+
+    public XY applyTile(BufferedImage tileImage, int sizeX, int sizeY, XY spot) {
         Color backgroundColor = composer.getBackgroundColorFor(spot);
-        BufferedImage tile = composer.prepareTile(image, backgroundColor, sizeX, sizeY);
+        BufferedImage tile = composer.prepareTile(tileImage, backgroundColor, sizeX, sizeY);
         composer.applyTile(spot, tile, sizeX, sizeY);
         saveComposedImageData(composer);
         return spot;
     }
 
     public BufferedImage getComposedImageThumbnail() {
-        TileComposer composer = prepareTileComposer();
-        Image image = composer.getImage();
-
-
-        int thumbHeight = THUMB_WIDTH *VERTICAL_TILES*TILE_SIZE/HORIZONTAL_TILES/TILE_SIZE;
-
-        BufferedImage thumbImage = new BufferedImage(THUMB_WIDTH, thumbHeight, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = thumbImage.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-        g.drawImage(image, 0, 0, THUMB_WIDTH, thumbHeight, null);
-        g.dispose();
-
-        return thumbImage;
+        int thumbHeight = THUMB_WIDTH * VERTICAL_TILES * TILE_SIZE / HORIZONTAL_TILES / TILE_SIZE;
+        return composer.getThumbnail(THUMB_WIDTH, thumbHeight);
     }
-
-    @SneakyThrows
-    public byte[] getImageData(BufferedImage image) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ImageIO.write(image, "jpg", bos);
-
-        return bos.toByteArray();
-    }
-
 
 }

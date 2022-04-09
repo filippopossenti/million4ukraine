@@ -1,6 +1,9 @@
 <div class="main">
   <div style="display: flex; ">
-    <h1 style="flex: 1;">Million &euro; for Ukraine</h1>
+    <div>
+      <a href="" style="padding: 8px;">Report Problem</a>
+    </div>
+    <h1 style="flex: 1;">100.000 &euro; for Ukraine</h1>
     <div class="donate-quick-link">
       <button onclick="location.href='#donate-form'">Donate</button>
     </div>
@@ -281,11 +284,19 @@
           </div>
         </div>
         <div>Donation amount: € {{targetDonation}}</div>
-        <div class="center-horizontally"><button (click)="upload()">Donate with Paypal</button></div>
+        <div class="center-horizontally"><button (click)="upload()">Donate</button></div>
       </div>
     </div>
   </div>
-  <div class="right-aligned">
-    <a href="" style="padding: 8px;">Report Abuse</a>
+  <div class="wait-mask-background" *ngIf="waitMaskVisible">
+  </div>
+  <div class="wait-mask" *ngIf="waitMaskVisible">
+    <div class="wait-mask-message-container">
+      <div class="wait-mask-message">
+        <span class="processing-message" *ngIf="processingData">We're processing your data. Please wait...</span>
+        <span class="processed-message" *ngIf="processDonate">We processed the data. Please use the button below to complete the donation. Your image and message will be processed after the donation.</span>
+        <div id="donate-button"></div>
+      </div>
+    </div>
   </div>
 </div>
