@@ -3,6 +3,7 @@ package it.openly.projects.million4ukraine.m4urest.views;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -35,4 +36,9 @@ public class M4UMessage {
     private int sizeX;
     @Column(name="size_y")
     private int sizeY;
+
+    @Column(name="processed")
+    private Boolean processed;
+    @Column(name="amount_donated")
+    private BigDecimal amountDonated;
 }

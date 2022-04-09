@@ -1,7 +1,6 @@
 package it.openly.projects.million4ukraine.m4urest.services;
 
 import it.openly.projects.million4ukraine.m4urest.repositories.M4UMessages;
-import it.openly.projects.million4ukraine.m4urest.utils.DataCleaner;
 import it.openly.projects.million4ukraine.m4urest.utils.XY;
 import it.openly.projects.million4ukraine.m4urest.views.M4UMessage;
 import it.openly.projects.million4ukraine.m4urest.views.NameAndMessage;
@@ -11,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -22,12 +22,25 @@ public class DataService {
     @Autowired
     M4UMessages repository;
 
-    public void saveMessage(M4UMessage request, XY spot) {
+    public void savePreDonationMessage(M4UMessage request, XY spot) {
         request.setId(UUID.randomUUID().toString());
         request.setTimestamp(new Date());
         request.setX(spot.getX());
         request.setY(spot.getY());
+        request.setProcessed(false);
+        request.setAmountDonated(null);
         repository.save(request);
+    }
+
+    public void savePostDonationMessage(M4UMessage request, BigDecimal amountDonated) {
+        request.setProcessed(true);
+        request.setAmountDonated(amountDonated);
+        repository.save(request);
+    }
+
+
+    public M4UMessage loadMessage(String uuid) {
+        return repository.getById(uuid);
     }
 
     public List<NameAndMessage> getLatestMessages() {

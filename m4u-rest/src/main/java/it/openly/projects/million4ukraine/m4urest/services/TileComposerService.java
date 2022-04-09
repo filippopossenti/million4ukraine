@@ -71,8 +71,11 @@ public class TileComposerService {
         ImageIO.write(composer.getMask(), "jpg", new File("image_mask.jpg"));
     }
 
-    public XY applyTile(BufferedImage tileImage, int sizeX, int sizeY) {
-        XY spot = composer.getRandomEmptySpot(sizeX, sizeY);
+    public XY selectRandomEmptySpot(int sizeX, int sizeY) {
+        return composer.getRandomEmptySpot(sizeX, sizeY);
+    }
+
+    public XY applyTile(BufferedImage tileImage, int sizeX, int sizeY, XY spot) {
         Color backgroundColor = composer.getBackgroundColorFor(spot);
         BufferedImage tile = composer.prepareTile(tileImage, backgroundColor, sizeX, sizeY);
         composer.applyTile(spot, tile, sizeX, sizeY);

@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { MgrService } from './mgr.service';
 
+declare var PayPal:any;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -25,6 +27,8 @@ export class AppComponent implements OnInit {
   baseDonation: number = 5;
 
   waitMaskVisible: boolean = false;
+  processingData: boolean = true;
+  processDonate: boolean = false;
 
   constructor(private mgrService: MgrService) {
     this.thumbnailurl = mgrService.getThumbnailUrl();
@@ -32,6 +36,28 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.loadLatestMessages();
+  }
+
+  preparePaypalDonateButton(uuid: any) {
+
+    PayPal.Donation.Button({
+        env: 'sandbox',
+        hosted_button_id: '84N4EYYMYMNZQ',
+        custom: uuid,
+        image: {
+            src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif',
+            alt: 'Donate with PayPal button',
+            title: 'PayPal - The safer, easier way to pay online!',
+        },
+        // notify_url: "https://422e-62-211-118-211.ngrok.io/",
+        onComplete: (result: any) => {
+            console.log(result);
+            if (result.st === "Completed") {
+                window.location.hash = "Upload?TX=" + result.tx + "&ID=" + result.cm;
+            }
+        }
+    }).render('#donate-button');
+
   }
 
   onNameKeyUp(evt: any) {
@@ -112,8 +138,11 @@ export class AppComponent implements OnInit {
       imageDataurl: this.imageDataurl,
       sizeX: this.size_x,
       sizeY: this.size_y
-    }).subscribe(result => {
+    }).subscribe((result: any) => {
       this.thumbnailurl = this.mgrService.getThumbnailUrl();
+      this.processingData = false;
+      this.processDonate = true;
+      this.preparePaypalDonateButton(result["payload"]);
       this.loadLatestMessages();
     });
   }
@@ -121,7 +150,6 @@ export class AppComponent implements OnInit {
   loadLatestMessages() {
     this.mgrService.getLatestDonations().subscribe(results => {
       this.latestDonations = results;
-      this.waitMaskVisible = false;
     });
   }
 }

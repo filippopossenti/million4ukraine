@@ -16,9 +16,13 @@ public class AsyncTileComposerService {
         this.tileComposerService = tileComposerService;
     }
 
+    public XY selectRandomEmptySpot(int sizeX, int sizeY) {
+        return tileComposerService.selectRandomEmptySpot(sizeX, sizeY);
+    }
+
     @Async
-    public CompletableFuture<XY> applyTile(BufferedImage tileImage, int sizeX, int sizeY) {
-        return CompletableFuture.completedFuture(tileComposerService.applyTile(tileImage, sizeX, sizeY));
+    public CompletableFuture<XY> applyTile(BufferedImage tileImage, int sizeX, int sizeY, XY spot) {
+        return CompletableFuture.completedFuture(tileComposerService.applyTile(tileImage, sizeX, sizeY, spot));
     }
 
     @Async

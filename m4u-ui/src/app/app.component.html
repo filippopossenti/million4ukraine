@@ -284,7 +284,7 @@
           </div>
         </div>
         <div>Donation amount: € {{targetDonation}}</div>
-        <div class="center-horizontally"><button (click)="upload()">Donate with Paypal</button></div>
+        <div class="center-horizontally"><button (click)="upload()">Donate</button></div>
       </div>
     </div>
   </div>
@@ -293,7 +293,9 @@
   <div class="wait-mask" *ngIf="waitMaskVisible">
     <div class="wait-mask-message-container">
       <div class="wait-mask-message">
-        We're processing your image. Please wait...
+        <span class="processing-message" *ngIf="processingData">We're processing your data. Please wait...</span>
+        <span class="processed-message" *ngIf="processDonate">We processed the data. Please use the button below to complete the donation. Your image and message will be processed after the donation.</span>
+        <div id="donate-button"></div>
       </div>
     </div>
   </div>
